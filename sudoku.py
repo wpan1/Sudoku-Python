@@ -1,11 +1,15 @@
 import argparse 
+import linecache
+import random
 from Tkinter import Tk, Canvas, Frame, Button, BOTH, TOP, BOTTOM
 
-BOARDS = ['easy', 'hard', 'debug', 'error'] #Types of sudoku boards
+BOARDS = ["veryeasy", "easy", "medium", "hard", "veryhard"] #Types of sudoku boards
 MARGIN = 20 #Margin (pixels) of padding
 SIDE = 50 #Width of board cell
 WIDTH = 2 * MARGIN + 9 * SIDE
 HEIGHT = WIDTH
+
+NUMBOARDS = 10000 # Number of total boards in file
 
 """
 Handle Application Specific Errors
@@ -318,22 +322,46 @@ def parse_arguments():
     return args.board
 
 """
+Parses board from txt file containing
+different board configurations varying
+in difficulty
+"""
+def parse_board(board_name):
+    # Read from sudoku input file, remove trailing whitespace
+    board_value = linecache.getline(board_name + ".txt", random.randint(0,NUMBOARDS))[0:9*9]
+    # Check if line is valid
+    if len(board_value) != 9*9:
+    	raise SudokuError("File does not have enough numbers")
+    # Convert line to valid format
+    board_list = []
+    # For each square
+    for i in range(9):
+    	# Create its own string element
+    	tempstr = ""
+    	for j in range(9):
+    		tempstr += board_value[i*9 + j]
+    	board_list.append(tempstr)
+    # Return finished board configuration
+    return board_list
+
+
+"""
 Main
 """
 if __name__ == '__main__':
 	# Get input arguments
     board_name = parse_arguments()
     # Read from sudoku input file
-    with open('%s.txt' % board_name, 'r') as boards_file:
-    	# Initialise the game
-        game = SudokuGame(boards_file)
-        game.start()
-        # Initialise Tkinter
-        root = Tk()
-        SudokuUI(root, game)
-        root.geometry("%dx%d" % (WIDTH, HEIGHT + 40))
-        # Start game loop
-        root.mainloop()
+    boards_file = parse_board(board_name)
+	# Initialise the game
+    game = SudokuGame(boards_file)
+    game.start()
+    # Initialise Tkinter
+    root = Tk()
+    SudokuUI(root, game)
+    root.geometry("%dx%d" % (WIDTH, HEIGHT + 40))
+    # Start game loop
+    root.mainloop()
 
 
 
