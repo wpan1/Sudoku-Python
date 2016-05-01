@@ -6,6 +6,6 @@ Run using
 
 python sudoku.py --board \<BOARDTYPE\>
 
-where \<BOARDTYPE\> is "hard" or "easy"
+where \<BOARDTYPE\> is "veryeasy", "easy", "medium", "hard" or "veryhard"
 
 For example: python sudoku.py --board hard
