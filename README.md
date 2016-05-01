@@ -16,3 +16,6 @@ python sudoku.py --board medium
 python sudoku.py --board hard
 python sudoku.py --board veryhard
 ```
+
+Games taken from 
+http://www.printable-sudoku-puzzles.com/wfiles/
